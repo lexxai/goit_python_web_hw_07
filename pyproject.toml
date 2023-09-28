@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "goit-python-web-hw-07"
+version = "0.1.0"
+description =  "GoIT, Python WEB, Homework number 07. SQL. ORM. SQLAlchemy. Alembic."
+authors = ["lexxai <lexxai@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
