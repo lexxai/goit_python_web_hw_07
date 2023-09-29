@@ -27,20 +27,20 @@ def read_config() -> str:
     database_name = section_db.get("db_name")
     username = section_db.get("username")
     password = section_db.get("password")
-    uri = f"postgresql:///{username}:{password}@{host}:{port}/{database_name}"
+    uri = f"postgresql://{username}:{password}@{host}:{port}/{database_name}"
     return uri
 
 
 def get_engine():
     uri = read_config()
-    if not uri:
+    if  uri:
         engine = create_engine(uri, echo=True)
         DBsession = sessionmaker(bind=engine)
         session = DBsession()
-        return engine, session
-    return None,None
+        return engine, session, uri
+    return None,None, None
 
 
-engine, session = get_engine()
+engine, session, uri = get_engine()
 if not engine:
     logger.error("engine not created")
