@@ -5,9 +5,7 @@ description =  "GoIT, Python WEB, Homework number 07. SQL. ORM. SQLAlchemy. Alem
 authors = ["lexxai <lexxai@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [
-    {from = "src"},
-]
+
 
 [tool.poetry.dependencies]
 python = "^3.11"
