@@ -81,7 +81,7 @@ class Teacher(Base):
     phone = Column(String(100))
     address = Column(String(150))
 
-    disciplines = relationship("Discipline", back_populates="teacher",  cascade="all, delete-orphan")
+    disciplines = relationship("Discipline", back_populates="teacher", cascade="all, delete" , passive_deletes=True)
 
     @hybrid_property
     def full_name(self):
@@ -92,7 +92,7 @@ class Discipline(Base):
     __tablename__ = "disciplines"
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False, unique=True)
-    teacher_id = Column(Integer, ForeignKey("teachers.id", ondelete="CASCADE"))
+    teacher_id = Column(Integer, ForeignKey("teachers.id", ondelete="SET NULL"), nullable=True)
     # teachers = relationship('Teachers')
 
     teacher = relationship("Teacher", back_populates="disciplines")
