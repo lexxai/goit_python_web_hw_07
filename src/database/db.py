@@ -42,5 +42,7 @@ def get_engine():
 
 
 engine, session, uri = get_engine()
+print("session created")
+
 if not engine:
     logger.error("engine not created")
