@@ -50,7 +50,7 @@ class Group(Base):
     __tablename__ = "groups"
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
-    stundents = relationship("Student", secondary="students", back_populates="group")
+    students = relationship("Student",  back_populates="group")
 
 
 class Student(Base):
@@ -64,8 +64,8 @@ class Student(Base):
     group_id = Column(Integer, ForeignKey("groups.id"))
     # groups = relationship('Groups', backref="group")
 
-    group = relationship("Group", secondary="groups", back_populates="stundents")
-    grade = relationship("Grade", secondary="grades", back_populates="stundent")
+    group = relationship("Group", back_populates="students")
+    grade = relationship("Grade", back_populates="student")
 
     @hybrid_property
     def full_name(self):
@@ -96,7 +96,7 @@ class Discipline(Base):
     # teachers = relationship('Teachers')
 
     teacher = relationship("Teacher", back_populates="disciplines")
-    grades = relationship("Grade", secondary="grades", back_populates="discipline")
+    grades = relationship("Grade", back_populates="discipline")
 
 
 class Grade(Base):
@@ -108,7 +108,7 @@ class Grade(Base):
     student_id = Column(Integer, ForeignKey("students.id", ondelete="CASCADE"))
     discipline_id = Column(Integer, ForeignKey("disciplines.id", ondelete="CASCADE"))
 
-    student = relationship("Student", secondary="students", back_populates="grade")
+    student = relationship("Student", back_populates="grade")
     discipline = relationship(
-        "Discipline", secondary="disciplines", back_populates="grades"
+        "Discipline", back_populates="grades"
     )
