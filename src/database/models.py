@@ -50,7 +50,7 @@ class Group(Base):
     __tablename__ = "groups"
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
-    students = relationship("Student",  back_populates="group")
+    students = relationship("Student",  back_populates="group",  cascade="all, delete" , passive_deletes=True)
 
 
 class Student(Base):
@@ -61,7 +61,7 @@ class Student(Base):
     email = Column(String(100))
     phone = Column(String(100))
     address = Column(String(150))
-    group_id = Column(Integer, ForeignKey("groups.id" , ondelete="CASCADE"))
+    group_id = Column(Integer, ForeignKey("groups.id", ondelete="SET NULL"), nullable=True)
     # groups = relationship('Groups', backref="group")
 
     group = relationship("Group", back_populates="students")
