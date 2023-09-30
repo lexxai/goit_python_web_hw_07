@@ -5,10 +5,15 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 import random
+import logging
+
 
 from database.db import session
 from database.models import Discipline
 from database.models import Teacher
+
+
+logger = logging.getLogger(__name__)
 
 DISCIPLINES = [
     "Python Core",
@@ -36,8 +41,11 @@ def select_teachers():
 
 
 def create_disciplines():
-    erase_disciplines()
     teachers = select_teachers()
+    if not teachers:
+        logger.error("Teachers NOT FOUND")
+        return
+    erase_disciplines()
     for discipline_name in DISCIPLINES:
         discipline = Discipline(
             name=discipline_name,

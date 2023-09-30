@@ -6,22 +6,35 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 
 from database.db import session
-from database.models import Student
+from database.models import Student, Group
 
 
 from faker import Faker
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 TOTAL_students = 100
+
 
 def erase_students():
     deleted_students = session.query(Student).delete()
     print(f"{deleted_students=}")
 
 
+def select_groups():
+    return session.query(Group).all()
+
+
 def create_students(total: int = TOTAL_students):
-    erase_students()
+    groups = select_groups()
+    if not groups:
+        logger.error("GROUPS NOT FOUND")
+        return
+
     fake: Faker = Faker("uk-UA")
+    erase_students()
     for _ in range(total):
         student = Student(
             first_name=fake.first_name(),
@@ -29,9 +42,11 @@ def create_students(total: int = TOTAL_students):
             email=fake.email(),
             phone=fake.phone_number(),
             address=fake.address(),
+            group_id=random.choice(groups).id,
         )
         session.add(student)
     session.commit()
+
 
 if __name__ == "__main__":
     create_students()

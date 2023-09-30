@@ -7,6 +7,9 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from database.db import session
 from database.models import Group
+import logging
+
+logger = logging.getLogger(__name__)
 
 GROUPS = [
     "M88-1/8",
