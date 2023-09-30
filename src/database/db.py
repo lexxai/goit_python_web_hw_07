@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def read_config() -> str:
     file_config = (
-        Path(__file__).parent.parent.joinpath(".config").joinpath("config.ini")
+        Path(__file__).parent.parent.parent.joinpath(".config").joinpath("config.ini")
     )
     if not file_config.exists():
         logger.error(f"CONFIG NOT FOUND {file_config}")

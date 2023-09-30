@@ -5,8 +5,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 
-from src.db import session
-from src.models import Teacher
+from database.db import session
+from database.models import Teacher
 
 
 from faker import Faker
@@ -14,8 +14,13 @@ import random
 
 TOTAL_TEACHERS = 10
 
+def erase_teachers():
+    deleted_teachers = session.query(Teacher).delete()
+    print(f"{deleted_teachers=}")
 
-def create_Teachers(total: int = TOTAL_TEACHERS):
+
+def create_teachers(total: int = TOTAL_TEACHERS):
+    erase_teachers()
     fake: Faker = Faker("uk-UA")
     for _ in range(total):
         teacher = Teacher(
@@ -30,4 +35,4 @@ def create_Teachers(total: int = TOTAL_TEACHERS):
 
 
 if __name__ == "__main__":
-    create_Teachers()
+    create_teachers()
