@@ -4,11 +4,23 @@
 # SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from seed.teachers import create_teachers
-from seed.disciplines import create_disciplines
-from seed.groups import create_groups
-from seed.students import create_students
-from seed.grades import create_gardes
+try:
+    from seed.teachers import create_teachers
+    from seed.disciplines import create_disciplines
+    from seed.groups import create_groups
+    from seed.students import create_students
+    from seed.grades import create_gardes
+except ImportError:
+    from teachers import create_teachers
+    from disciplines import create_disciplines
+    from groups import create_groups
+    from students import create_students
+    from grades import create_gardes
+
+import logging
+
+logger = logging.getLogger()
+
 
 def create_data():
     create_teachers()
@@ -19,4 +31,5 @@ def create_data():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     create_data()

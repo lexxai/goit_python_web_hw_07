@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
+logger.setLevel(level=logging.DEBUG)
 
 
 def read_config() -> str:
@@ -42,7 +43,7 @@ def get_engine():
 
 
 engine, session, uri = get_engine()
-print("session created")
+logger.debug("session created")
 
 if not engine:
     logger.error("engine not created")
