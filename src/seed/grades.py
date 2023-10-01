@@ -19,7 +19,7 @@ package_name = "hw"
 logger = logging.getLogger(f"{package_name}.{__name__}")
 fake = Faker()
 
-TOTAL_GRADES = 1
+TOTAL_GRADES_DAYS = 400
 
 
 def erase_grades():
@@ -60,7 +60,7 @@ def get_random_day() -> date:
     return fake_day
 
 
-def create_gardes(total: int = TOTAL_GRADES):
+def create_gardes(total: int = TOTAL_GRADES_DAYS):
     groups = select_groups()
     if not groups:
         logger.error("GROUPS NOT FOUND")
@@ -144,6 +144,6 @@ def create_gardes(total: int = TOTAL_GRADES):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.ERROR)
-    logger.setLevel(logging.INFO)
+    # logging.basicConfig(level=logging.ERROR)
+    # logger.setLevel(logging.INFO)
     create_gardes()
