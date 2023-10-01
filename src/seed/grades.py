@@ -13,11 +13,11 @@ from datetime import date, datetime
 from random import randint, choice
 import logging
 
-package_name="hw"
+package_name = "hw"
 logger = logging.getLogger(f"{package_name}.{__name__}")
 fake = Faker()
 
-TOTAL_GRADES = 400
+TOTAL_GRADES = 1
 
 
 def erase_grades():
@@ -73,16 +73,17 @@ def create_gardes(total: int = TOTAL_GRADES):
         random_discipline = choice(disciplines).id
         group_id = choice(groups).id
         group_students = select_students_in_group(group_id)
+        group_students_id = [st.id for st in group_students]
         max_random_students_in_group = min(12, len(group_students))
         min_random_students_in_group = min(3, len(group_students))
-        random_student = choice(select_students_in_group(group_id)).id
+        # random_student = choice(select_students_in_group(group_id)).id
         random_date_of = get_random_day()
         how_many_grades_today_in_group = randint(
             min_random_students_in_group, max_random_students_in_group
         )
         for _ in range(how_many_grades_today_in_group):
             random_grade = randint(30, 100)
-            random_student = choice(group_students).id
+            random_student = choice(group_students_id)
             grade = Grade(
                 grade=random_grade,
                 student_id=random_student,
@@ -136,5 +137,6 @@ def create_gardes(total: int = TOTAL_GRADES):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.ERROR)
+    logger.setLevel(logging.INFO)
     create_gardes()

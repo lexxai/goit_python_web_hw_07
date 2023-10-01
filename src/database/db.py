@@ -34,7 +34,7 @@ def read_config() -> str:
 def get_engine():
     uri = read_config()
     if  uri:
-        engine = create_engine(uri, echo=False)
+        engine = create_engine(uri, echo=True)
         DBsession = sessionmaker(bind=engine)
         session = DBsession()
         return engine, session, uri
