@@ -19,7 +19,8 @@ except ImportError:
 
 import logging
 
-logger = logging.getLogger()
+package_name="hw"
+logger = logging.getLogger(f"{package_name}.{__name__}")
 
 
 def create_data():

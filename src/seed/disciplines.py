@@ -13,7 +13,8 @@ from database.models import Discipline
 from database.models import Teacher
 
 
-logger = logging.getLogger(__name__)
+package_name="hw"
+logger = logging.getLogger(f"{package_name}.{__name__}")
 
 DISCIPLINES = [
     "Python Core",

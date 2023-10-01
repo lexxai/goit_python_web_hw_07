@@ -9,7 +9,8 @@ from database.db import session
 from database.models import Group
 import logging
 
-logger = logging.getLogger(__name__)
+package_name="hw"
+logger = logging.getLogger(f"{package_name}.{__name__}")
 
 GROUPS = [
     "M88-1/8",

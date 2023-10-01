@@ -13,7 +13,8 @@ from datetime import date, datetime
 from random import randint, choice
 import logging
 
-logger = logging.getLogger(__name__)
+package_name="hw"
+logger = logging.getLogger(f"{package_name}.{__name__}")
 fake = Faker()
 
 TOTAL_GRADES = 400
@@ -96,42 +97,42 @@ def create_gardes(total: int = TOTAL_GRADES):
     logger.info(f"{grade_day=}")
 
 
-def seed_grade():
-    satrt_date = datetime.strptime("2023-04-21", "%Y-%m-%d")
-    end_date = datetime.strptime("2024-02-20", "%Y-%m-%d")
+# def seed_grade():
+#     satrt_date = datetime.strptime("2023-04-21", "%Y-%m-%d")
+#     end_date = datetime.strptime("2024-02-20", "%Y-%m-%d")
 
-    def get_day() -> date:
-        fake_day: date
-        while True:
-            fake_day = fake.date_between(satrt_date, end_date)
-            if fake_day.isoweekday() < 6:
-                break
-        return fake_day
+#     def get_day() -> date:
+#         fake_day: date
+#         while True:
+#             fake_day = fake.date_between(satrt_date, end_date)
+#             if fake_day.isoweekday() < 6:
+#                 break
+#         return fake_day
 
-    grades = []
-    sql = "INSERT INTO grade(grade, disciplines_id, students_id, date_of) VALUES (?, ?, ?, ?);"
-    for _ in range(TOTAL_GRADES):
-        random_discipline = randint(1, len(disciplines))
-        random_group = randint(1, len(groups))
-        # random_gardes = [randint(1, TOTAL_gardes) for _ in range(randint(3, 12))]
-        group_gardes = get_group_gardes(cur, random_group)
-        max_random_gardes_in_group = min(12, len(group_gardes))
-        min_random_gardes_in_group = min(3, len(group_gardes))
-        random_gardes = sample(
-            group_gardes,
-            randint(min_random_gardes_in_group, max_random_gardes_in_group),
-        )
-        # random_gardes = []
-        random_date_of = get_day()
-        for random_student in random_gardes:
-            random_grade = randint(30, 100)
-            grades.append(
-                (random_grade, random_discipline, random_student, random_date_of)
-            )
-    try:
-        cur.executemany(sql, grades)
-    except Error as e:
-        logger.error(e)
+#     grades = []
+#     sql = "INSERT INTO grade(grade, disciplines_id, students_id, date_of) VALUES (?, ?, ?, ?);"
+#     for _ in range(TOTAL_GRADES):
+#         random_discipline = randint(1, len(disciplines))
+#         random_group = randint(1, len(groups))
+#         # random_gardes = [randint(1, TOTAL_gardes) for _ in range(randint(3, 12))]
+#         group_gardes = get_group_gardes(cur, random_group)
+#         max_random_gardes_in_group = min(12, len(group_gardes))
+#         min_random_gardes_in_group = min(3, len(group_gardes))
+#         random_gardes = sample(
+#             group_gardes,
+#             randint(min_random_gardes_in_group, max_random_gardes_in_group),
+#         )
+#         # random_gardes = []
+#         random_date_of = get_day()
+#         for random_student in random_gardes:
+#             random_grade = randint(30, 100)
+#             grades.append(
+#                 (random_grade, random_discipline, random_student, random_date_of)
+#             )
+#     try:
+#         cur.executemany(sql, grades)
+#     except Error as e:
+#         logger.error(e)
 
 
 if __name__ == "__main__":

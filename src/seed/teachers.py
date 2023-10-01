@@ -13,7 +13,8 @@ from faker import Faker
 import random
 import logging
 
-logger = logging.getLogger(__name__)
+package_name="hw"
+logger = logging.getLogger(f"{package_name}.{__name__}")
 
 TOTAL_TEACHERS = 10
 
@@ -51,4 +52,6 @@ def create_teachers(total: int = TOTAL_TEACHERS):
 
 
 if __name__ == "__main__":
+    logging.basicConfig()
+    logger.setLevel(logging.INFO)   
     create_teachers()

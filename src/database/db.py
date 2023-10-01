@@ -5,8 +5,7 @@ import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-logger = logging.getLogger(__name__)
-logger.setLevel(level=logging.DEBUG)
+logger = logging.getLogger()
 
 
 def read_config() -> str:
