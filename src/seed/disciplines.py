@@ -33,7 +33,7 @@ DISCIPLINES = [
 
 def erase_disciplines():
     deleted_disciplines = session.query(Discipline).delete()
-    print(f"{deleted_disciplines=}")
+    logger.info(f"{deleted_disciplines=}")
 
 
 def select_teachers():

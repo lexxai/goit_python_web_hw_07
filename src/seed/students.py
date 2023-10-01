@@ -20,7 +20,7 @@ TOTAL_students = 100
 
 def erase_students():
     deleted_students = session.query(Student).delete()
-    print(f"{deleted_students=}")
+    logger.info(f"{deleted_students=}")
 
 
 def select_groups():

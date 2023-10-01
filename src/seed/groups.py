@@ -28,7 +28,7 @@ GROUPS = [
 
 def erase_groups():
     deleted_groups = session.query(Group).delete()
-    print(f"{deleted_groups=}")
+    logger.info(f"{deleted_groups=}")
 
 
 def create_groups():

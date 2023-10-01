@@ -11,6 +11,9 @@ from database.models import Teacher
 
 from faker import Faker
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 TOTAL_TEACHERS = 10
 
@@ -20,12 +23,12 @@ def drop_teachers():
 
 def erase_teachers():
     deleted_teachers = session.query(Teacher).delete()
-    print(f"{deleted_teachers=}")
+    logger.info(f"{deleted_teachers=}")
 
 def erase_teachers_by_one():
     teachers = session.query(Teacher).filter_by(id='1').all()
     for teacher in teachers:
-        print(f"delete_teacher : {teacher.id}")
+        logger.info(f"delete_teacher : {teacher.id}")
         session.delete(teacher)
 
 

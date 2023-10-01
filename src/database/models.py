@@ -50,7 +50,9 @@ class Group(Base):
     __tablename__ = "groups"
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False, unique=True)
-    students = relationship("Student",  back_populates="group",  cascade="all, delete" , passive_deletes=True)
+    students = relationship(
+        "Student", back_populates="group", cascade="all, delete", passive_deletes=True
+    )
 
 
 class Student(Base):
@@ -61,7 +63,9 @@ class Student(Base):
     email = Column(String(100))
     phone = Column(String(100))
     address = Column(String(150))
-    group_id = Column(Integer, ForeignKey("groups.id", ondelete="SET NULL"), nullable=True)
+    group_id = Column(
+        Integer, ForeignKey("groups.id", ondelete="SET NULL"), nullable=True
+    )
     # groups = relationship('Groups', backref="group")
 
     group = relationship("Group", back_populates="students")
@@ -81,7 +85,12 @@ class Teacher(Base):
     phone = Column(String(100))
     address = Column(String(150))
 
-    disciplines = relationship("Discipline", back_populates="teacher", cascade="all, delete" , passive_deletes=True)
+    disciplines = relationship(
+        "Discipline",
+        back_populates="teacher",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
     @hybrid_property
     def full_name(self):
@@ -92,7 +101,9 @@ class Discipline(Base):
     __tablename__ = "disciplines"
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False, unique=True)
-    teacher_id = Column(Integer, ForeignKey("teachers.id", ondelete="SET NULL"), nullable=True)
+    teacher_id = Column(
+        Integer, ForeignKey("teachers.id", ondelete="SET NULL"), nullable=True
+    )
     # teachers = relationship('Teachers')
 
     teacher = relationship("Teacher", back_populates="disciplines")
@@ -103,12 +114,9 @@ class Grade(Base):
     __tablename__ = "grades"
     id = Column(Integer, primary_key=True)
     grade = Column(Integer, nullable=False)
-    name = Column(String(100), nullable=False)
     date_of = Column(Date, nullable=False)
     student_id = Column(Integer, ForeignKey("students.id", ondelete="CASCADE"))
     discipline_id = Column(Integer, ForeignKey("disciplines.id", ondelete="CASCADE"))
 
     student = relationship("Student", back_populates="grade")
-    discipline = relationship(
-        "Discipline", back_populates="grades"
-    )
+    discipline = relationship("Discipline", back_populates="grades")
