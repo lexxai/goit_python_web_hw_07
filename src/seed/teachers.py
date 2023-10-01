@@ -43,7 +43,7 @@ def create_teachers(total: int = TOTAL_TEACHERS):
         teacher = Teacher(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
-            email=fake.email(),
+            email=fake.ascii_free_email(),
             phone=fake.phone_number(),
             address=fake.address(),
         )
