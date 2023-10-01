@@ -1,6 +1,8 @@
 import sys
 import os
 
+from sqlalchemy import select, delete
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
@@ -21,24 +23,29 @@ TOTAL_GRADES = 1
 
 
 def erase_grades():
-    deleted_gardes = session.query(Grade).delete()
+    # deleted_gardes = session.query(Grade).delete()
+    deleted_gardes = session.execute(delete(Grade))
     logger.info(f"{deleted_gardes=}")
 
 
 def select_groups():
-    return session.query(Group).all()
+    return session.execute(select(Group.id)).all()
+    # return session.query(Group).all()
 
 
 def select_students():
-    return session.query(Student).all()
+    return session.execute(select(Student.id)).all()
+    #return session.query(Student).all()
 
 
 def select_students_in_group(group_id: int):
-    return session.query(Student).filter_by(group_id=group_id).all()
+    return session.execute(select(Student.id).filter_by(group_id=group_id)).all()
+    #return session.query(Student).filter_by(group_id=group_id).all()
 
 
 def select_disciplines():
-    return session.query(Discipline).all()
+    return session.execute(select(Discipline.id)).all()
+    # return session.query(Discipline.id).all()
 
 
 def get_random_day() -> date:
