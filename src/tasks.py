@@ -104,6 +104,21 @@ def task_03(*args, **kwargs):
     )
     return get_query_dict(query)
 
+def task_04(*args, **kwargs):
+    """
+    SELECT ROUND(AVG(grade),2) as average_garde
+    FROM grade 
+    ORDER BY average_garde DESC
+    """
+    discipline_id = kwargs.get("discipline_id", 2)
+    query = (
+        session.query(
+            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
+        )
+        .order_by(desc("Average grade"))
+    )
+    return get_query_dict(query)
+
 
 
 
