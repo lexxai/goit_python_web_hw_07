@@ -1,11 +1,11 @@
 import logging
 
-from sqlalchemy import func, select, label, desc
+from sqlalchemy import func, select, label, desc, and_
 
 from database.db import session
 from database.models import Student, Teacher, Group, Grade, Discipline
 
-package_name="hw"
+package_name = "hw"
 logger = logging.getLogger(package_name)
 
 
@@ -50,8 +50,8 @@ def task_02(*args, **kwargs):
     """
     SELECT d.name AS discipline, s.fullname as student, ROUND(AVG(grade),2) as average_garde
     FROM grade g
-    LEFT JOIN students s ON s.id = g.students_id 
-    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
+    LEFT JOIN students s ON s.id = g.students_id
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id
     WHERE g.disciplines_id = 2
     GROUP BY s.id
     ORDER BY average_garde DESC
@@ -60,7 +60,7 @@ def task_02(*args, **kwargs):
     discipline_id = kwargs.get("discipline_id", 2)
     query = (
         session.query(
-            label("Discipline",Discipline.name),
+            label("Discipline", Discipline.name),
             func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
             func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
         )
@@ -79,18 +79,18 @@ def task_03(*args, **kwargs):
     """
     SELECT  d.name AS discipline, gr.name AS [group], ROUND(AVG(grade),2) as average_garde
     FROM grade g
-    LEFT JOIN students s ON s.id = g.students_id 
-    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
-    LEFT JOIN groups gr ON s.group_id = gr.id 
+    LEFT JOIN students s ON s.id = g.students_id
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id
+    LEFT JOIN groups gr ON s.group_id = gr.id
     WHERE g.disciplines_id = 2
-    GROUP BY gr.id 
+    GROUP BY gr.id
     ORDER BY average_garde DESC
     """
     discipline_id = kwargs.get("discipline_id", 2)
     query = (
         session.query(
-            label("Discipline",Discipline.name),
-            label("Group",Group.name),
+            label("Discipline", Discipline.name),
+            label("Group", Group.name),
             func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
         )
         .select_from(Grade)
@@ -104,35 +104,33 @@ def task_03(*args, **kwargs):
     )
     return get_query_dict(query)
 
+
 def task_04(*args, **kwargs):
     """
     SELECT ROUND(AVG(grade),2) as average_garde
-    FROM grade 
+    FROM grade
     ORDER BY average_garde DESC
     """
     discipline_id = kwargs.get("discipline_id", 2)
-    query = (
-        session.query(
-            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
-        )
-        .order_by(desc("Average grade"))
-    )
+    query = session.query(
+        func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
+    ).order_by(desc("Average grade"))
     return get_query_dict(query)
 
 
 def task_05(*args, **kwargs):
     """
     SELECT t.fullname AS teacher, d.name AS discipline
-    FROM grade g 
-    LEFT JOIN disciplines d ON g.disciplines_id  = d.id 
-    LEFT JOIN teachers t ON d.teachers_id = t.id 
+    FROM grade g
+    LEFT JOIN disciplines d ON g.disciplines_id  = d.id
+    LEFT JOIN teachers t ON d.teachers_id = t.id
     WHERE t.id = 1
     GROUP BY d.id
     """
     teacher_id = kwargs.get("teacher_id", 10)
     query = (
         session.query(
-            label("Discipline",Discipline.name),
+            label("Discipline", Discipline.name),
             func.CONCAT(Teacher.first_name, " ", Teacher.last_name).label("Teacher"),
         )
         .select_from(Discipline)
@@ -147,14 +145,14 @@ def task_06(*args, **kwargs):
     """
     SELECT gr.name as [group] , s.fullname as student, REVERSE(SUBSTR(REVERSE(s.fullname), 0, CHARINDEX(' ', REVERSE(s.fullname)))) AS last_name
     FROM students s
-    LEFT JOIN groups gr ON s.group_id = gr.id 
+    LEFT JOIN groups gr ON s.group_id = gr.id
     WHERE group_id = 1
     ORDER BY last_name
     """
     group_id = kwargs.get("group_id", 1)
     query = (
         session.query(
-            label("Group",Group.name),
+            label("Group", Group.name),
             func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
         )
         .select_from(Student)
@@ -164,6 +162,33 @@ def task_06(*args, **kwargs):
     )
     return get_query_dict(query)
 
+
+def task_07(*args, **kwargs):
+    """
+    SELECT s.fullname as student, d.name AS discipline, gr.name AS [group], grade
+    FROM grade g
+    LEFT JOIN students s ON s.id = g.students_id
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id
+    LEFT JOIN groups gr ON s.group_id = gr.id
+    WHERE d.id = 1 AND gr.id = 1
+    ORDER BY grade DESC
+    """
+    discipline_id = kwargs.get("discipline_id", 1)
+    group_id = kwargs.get("group_id", 1)
+    query = (
+        session.query(
+            func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
+            label("Group", Group.name),
+            label("Discipline", Discipline.name),
+            label("Grade", Grade.grade),
+        )
+        .select_from(Grade)
+        .join(Student)
+        .join(Discipline)
+        .filter(and_(Group.id == group_id, Discipline.id == discipline_id))
+        .order_by(desc(Grade.grade))
+    )
+    return get_query_dict(query)
 
 
 if __name__ == "__main__":
