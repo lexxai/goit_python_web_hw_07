@@ -191,6 +191,32 @@ def task_07(*args, **kwargs):
     return get_query_dict(query)
 
 
+def task_08(*args, **kwargs):
+    """
+    SELECT t.fullname AS teacher, d.name AS discipline, ROUND(AVG(grade),2) as average_garde
+    FROM grade g 
+    LEFT JOIN disciplines d ON g.disciplines_id  = d.id 
+    LEFT JOIN teachers t ON d.teachers_id = t.id 
+    WHERE t.id = 1
+    GROUP BY d.id
+    """
+    teacher_id = kwargs.get("teacher_id", 8)
+    query = (
+        session.query(
+            func.CONCAT(Teacher.first_name, " ", Teacher.last_name).label("Teacher"),
+            label("Discipline", Discipline.name),
+            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade")
+        )
+        .select_from(Grade)
+        .join(Discipline)
+        .join(Teacher)
+        .filter(Teacher.id == teacher_id)
+        .group_by(Discipline.id, Teacher.first_name, Teacher.last_name)
+        .order_by(desc("Average grade"))
+    )
+    return get_query_dict(query)
+
+
 if __name__ == "__main__":
     # print(globals())
     # print(dir())
