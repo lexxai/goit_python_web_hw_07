@@ -120,6 +120,28 @@ def task_04(*args, **kwargs):
     return get_query_dict(query)
 
 
+def task_05(*args, **kwargs):
+    """
+    SELECT t.fullname AS teacher, d.name AS discipline
+    FROM grade g 
+    LEFT JOIN disciplines d ON g.disciplines_id  = d.id 
+    LEFT JOIN teachers t ON d.teachers_id = t.id 
+    WHERE t.id = 1
+    GROUP BY d.id
+    """
+    teacher_id = kwargs.get("teacher_id", 10)
+    query = (
+        session.query(
+            label("Discipline",Discipline.name),
+            func.CONCAT(Teacher.first_name, " ", Teacher.last_name).label("Teacher"),
+        )
+        .select_from(Discipline)
+        .join(Teacher)
+        .filter(Teacher.id == teacher_id)
+        .order_by(desc(Discipline.name))
+    )
+    return get_query_dict(query)
+
 
 
 if __name__ == "__main__":
