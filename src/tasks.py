@@ -194,9 +194,9 @@ def task_07(*args, **kwargs):
 def task_08(*args, **kwargs):
     """
     SELECT t.fullname AS teacher, d.name AS discipline, ROUND(AVG(grade),2) as average_garde
-    FROM grade g 
-    LEFT JOIN disciplines d ON g.disciplines_id  = d.id 
-    LEFT JOIN teachers t ON d.teachers_id = t.id 
+    FROM grade g
+    LEFT JOIN disciplines d ON g.disciplines_id  = d.id
+    LEFT JOIN teachers t ON d.teachers_id = t.id
     WHERE t.id = 1
     GROUP BY d.id
     """
@@ -205,7 +205,7 @@ def task_08(*args, **kwargs):
         session.query(
             func.CONCAT(Teacher.first_name, " ", Teacher.last_name).label("Teacher"),
             label("Discipline", Discipline.name),
-            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade")
+            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
         )
         .select_from(Grade)
         .join(Discipline)
@@ -221,8 +221,8 @@ def task_09(*args, **kwargs):
     """
     SELECT  s.fullname as student, d.name AS discipline
     FROM grade g
-    LEFT JOIN students s ON s.id = g.students_id 
-    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
+    LEFT JOIN students s ON s.id = g.students_id
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id
     WHERE s.id = 3
     GROUP BY discipline
     ORDER BY discipline
@@ -247,15 +247,15 @@ def task_10(*args, **kwargs):
     """
     SELECT d.name AS discipline, s.fullname as student, t.fullname AS teacher
     FROM grade g
-    LEFT JOIN students s ON s.id = g.students_id 
-    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
-    LEFT JOIN teachers t ON d.teachers_id = t.id 
+    LEFT JOIN students s ON s.id = g.students_id
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id
+    LEFT JOIN teachers t ON d.teachers_id = t.id
     WHERE s.id = 3 AND t.id = 1
     GROUP BY discipline
     ORDER BY discipline
     """
     student_id = kwargs.get("student_id", 5)
-    teacher_id = kwargs.get("teacher_id", 8)    
+    teacher_id = kwargs.get("teacher_id", 8)
 
     query = (
         session.query(
@@ -278,22 +278,22 @@ def task_11(*args, **kwargs):
     """
     SELECT d.name AS discipline, s.fullname as student, t.fullname AS teacher, ROUND(AVG(grade),2) as average_garde
     FROM grade g
-    LEFT JOIN students s ON s.id = g.students_id 
-    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
-    LEFT JOIN teachers t ON d.teachers_id = t.id 
+    LEFT JOIN students s ON s.id = g.students_id
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id
+    LEFT JOIN teachers t ON d.teachers_id = t.id
     WHERE s.id = 3 AND t.id = 1
     GROUP BY discipline
     ORDER BY average_garde DESC
     """
     student_id = kwargs.get("student_id", 5)
-    teacher_id = kwargs.get("teacher_id", 8)    
+    teacher_id = kwargs.get("teacher_id", 8)
 
     query = (
         session.query(
             label("Discipline", Discipline.name),
             func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
             func.CONCAT(Teacher.first_name, " ", Teacher.last_name).label("Teacher"),
-            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade")
+            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
         )
         .select_from(Grade)
         .join(Discipline)
@@ -302,6 +302,60 @@ def task_11(*args, **kwargs):
         .filter(and_(Student.id == student_id, Teacher.id == teacher_id))
         .group_by(Discipline.id, "Student", "Teacher")
         .order_by(desc("Average grade"))
+    )
+    return get_query_dict(query)
+
+
+def task_12(*args, **kwargs):
+    """
+    SELECT gr.name AS [group], d.name AS discipline, s.fullname as student, t.fullname AS teacher, grade, date_of
+    FROM grade g
+    LEFT JOIN students s ON s.id = g.students_id
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id
+    LEFT JOIN teachers t ON d.teachers_id = t.id
+    LEFT JOIN groups gr ON s.group_id = gr.id
+    WHERE gr.id = 3 AND d.id = 1
+    AND date_of = (
+        SELECT MAX(date_of)
+        FROM grade g
+        LEFT JOIN students s ON s.id = g.students_id
+        WHERE s.group_id = 3 AND g.disciplines_id = 1
+    )
+    ORDER BY grade DESC;
+    """
+    discipline_id = kwargs.get("discipline_id", 1)
+    group_id = kwargs.get("group_id", 1)
+
+    subquery = (
+        session.query(func.MAX(Grade.date_of))
+        .select_from(Grade)
+        .join(Student)
+        .filter(
+            and_(Student.group_id == group_id, Grade.discipline_id == discipline_id)
+        )
+    ).scalar_subquery()
+
+    query = (
+        session.query(
+            label("Group", Group.name),
+            label("Discipline", Discipline.name),
+            func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
+            func.CONCAT(Teacher.first_name, " ", Teacher.last_name).label("Teacher"),
+            label("DATE OF", Grade.date_of),
+            label("Grade", Grade.grade),
+        )
+        .select_from(Grade)
+        .join(Discipline)
+        .join(Student)
+        .join(Teacher)
+        .filter(
+            and_(
+                Group.id == group_id,
+                Grade.discipline_id == discipline_id,
+                Grade.date_of == subquery,
+            )
+        )
+        .order_by(desc("Grade"))
     )
     return get_query_dict(query)
 
