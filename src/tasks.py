@@ -217,6 +217,32 @@ def task_08(*args, **kwargs):
     return get_query_dict(query)
 
 
+def task_09(*args, **kwargs):
+    """
+    SELECT  s.fullname as student, d.name AS discipline
+    FROM grade g
+    LEFT JOIN students s ON s.id = g.students_id 
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
+    WHERE s.id = 3
+    GROUP BY discipline
+    ORDER BY discipline
+    """
+    student_id = kwargs.get("student_id", 1)
+    query = (
+        session.query(
+            func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
+            label("Discipline", Discipline.name),
+        )
+        .select_from(Grade)
+        .join(Discipline)
+        .join(Student)
+        .filter(Student.id == student_id)
+        .group_by(Discipline.id, Student.first_name, Student.last_name)
+        .order_by(Discipline.name)
+    )
+    return get_query_dict(query)
+
+
 if __name__ == "__main__":
     # print(globals())
     # print(dir())
