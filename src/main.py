@@ -9,8 +9,8 @@ package_name="hw"
 logger = logging.getLogger(package_name)
 
 if __name__ == "__main__":
-    logging.basicConfig()
-    logger.setLevel(logging.INFO)
+    # logging.basicConfig()
+    # logger.setLevel(logging.INFO)
     args = app_arg()
     # create_data()
 
