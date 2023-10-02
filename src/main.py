@@ -22,9 +22,9 @@ if __name__ == "__main__":
         if task_result:
             column_names = task_result.get("column_names")
             print(".   " * 20)
-            for row in enumerate(task_result.get("result")):
+            for id, row in enumerate(task_result.get("result")):
                 row_str = []
-                for i, col in enumerate(row[1]):
-                    row_str.append(f"{column_names[i]}: {col}")
+                for i, col in enumerate(row):
+                    row_str.append(f'{column_names[i]}: "{col}"')
                 result = ", ".join(row_str)
-                print(result)
+                print(f"[{id+1:2}] {result}")

@@ -57,8 +57,7 @@ def task_02(*args, **kwargs):
     ORDER BY average_garde DESC
     LIMIT 1
     """
-    discipline_id = kwargs.get("discipline_id", 419)
-    print(f"{discipline_id=}")
+    discipline_id = kwargs.get("discipline_id", 2)
     query = (
         session.query(
             label("Discipline",Discipline.name),
@@ -76,6 +75,38 @@ def task_02(*args, **kwargs):
     return get_query_dict(query)
 
 
+def task_03(*args, **kwargs):
+    """
+    SELECT  d.name AS discipline, gr.name AS [group], ROUND(AVG(grade),2) as average_garde
+    FROM grade g
+    LEFT JOIN students s ON s.id = g.students_id 
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
+    LEFT JOIN groups gr ON s.group_id = gr.id 
+    WHERE g.disciplines_id = 2
+    GROUP BY gr.id 
+    ORDER BY average_garde DESC
+    """
+    discipline_id = kwargs.get("discipline_id", 2)
+    query = (
+        session.query(
+            label("Discipline",Discipline.name),
+            label("Group",Group.name),
+            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
+        )
+        .select_from(Grade)
+        .join(Student)
+        .join(Discipline)
+        .join(Group)
+        .filter(Discipline.id == discipline_id)
+        .group_by(Student.id, Discipline.name, Group.name)
+        .order_by(desc("Average grade"))
+        .limit(1)
+    )
+    return get_query_dict(query)
+
+
+
+
 if __name__ == "__main__":
     # print(globals())
     # print(dir())
@@ -91,9 +122,9 @@ if __name__ == "__main__":
         if task_result:
             column_names = task_result.get("column_names")
             print(".   " * 20)
-            for row in enumerate(task_result.get("result")):
+            for id, row in enumerate(task_result.get("result")):
                 row_str = []
-                for i, col in enumerate(row[1]):
-                    row_str.append(f"{column_names[i]}: {col}")
+                for i, col in enumerate(row):
+                    row_str.append(f'{column_names[i]}: "{col}"')
                 result = ", ".join(row_str)
-                print(result)
+                print(f"[{id+1:2}] {result}")
