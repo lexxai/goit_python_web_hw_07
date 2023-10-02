@@ -4,6 +4,16 @@ from database.db import session
 from database.models import Student, Teacher, Group, Grade, Discipline
 
 
+def get_tasks(obj=None):
+    if obj is None:
+        obj = globals()
+    tasks = [
+        globals().get(task_str)
+        for task_str in filter(lambda x: x.startswith("task_"), obj)
+    ]
+    return tasks
+
+
 def get_query_dict(query):
     return {"column_names": query.statement.columns.keys(), "result": query.all()}
 
@@ -20,11 +30,12 @@ def task_01(*args, **kwargs):
     query = (
         session.query(
             func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
-            func.ROUND(func.AVG(Grade.grade), 2).label("average_grade"),
+            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade"),
         )
         .select_from(Grade)
         .join(Student)
         .group_by(Student.id)
+        .order_by(desc("Average grade"))
         .limit(5)
     )
     return get_query_dict(query)
@@ -32,16 +43,6 @@ def task_01(*args, **kwargs):
 
 def task_02(*args, **kwargs):
     r = session.query()
-
-
-def get_tasks(obj=None):
-    if obj is None:
-        obj = globals()
-    tasks = [
-        globals().get(task_str)
-        for task_str in filter(lambda x: x.startswith("task_"), obj)
-    ]
-    return tasks
 
 
 if __name__ == "__main__":
