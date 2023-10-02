@@ -268,8 +268,40 @@ def task_10(*args, **kwargs):
         .join(Student)
         .join(Teacher)
         .filter(and_(Student.id == student_id, Teacher.id == teacher_id))
-        .group_by(Discipline.id, Student.first_name, Student.last_name, Teacher.first_name, Teacher.last_name)
+        .group_by(Discipline.id, "Student", "Teacher")
         .order_by(Discipline.name)
+    )
+    return get_query_dict(query)
+
+
+def task_11(*args, **kwargs):
+    """
+    SELECT d.name AS discipline, s.fullname as student, t.fullname AS teacher, ROUND(AVG(grade),2) as average_garde
+    FROM grade g
+    LEFT JOIN students s ON s.id = g.students_id 
+    LEFT JOIN disciplines d ON g.disciplines_id = d.id 
+    LEFT JOIN teachers t ON d.teachers_id = t.id 
+    WHERE s.id = 3 AND t.id = 1
+    GROUP BY discipline
+    ORDER BY average_garde DESC
+    """
+    student_id = kwargs.get("student_id", 5)
+    teacher_id = kwargs.get("teacher_id", 8)    
+
+    query = (
+        session.query(
+            label("Discipline", Discipline.name),
+            func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
+            func.CONCAT(Teacher.first_name, " ", Teacher.last_name).label("Teacher"),
+            func.ROUND(func.AVG(Grade.grade), 2).label("Average grade")
+        )
+        .select_from(Grade)
+        .join(Discipline)
+        .join(Student)
+        .join(Teacher)
+        .filter(and_(Student.id == student_id, Teacher.id == teacher_id))
+        .group_by(Discipline.id, "Student", "Teacher")
+        .order_by(desc("Average grade"))
     )
     return get_query_dict(query)
 
