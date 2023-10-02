@@ -138,7 +138,29 @@ def task_05(*args, **kwargs):
         .select_from(Discipline)
         .join(Teacher)
         .filter(Teacher.id == teacher_id)
-        .order_by(desc(Discipline.name))
+        .order_by(Discipline.name)
+    )
+    return get_query_dict(query)
+
+
+def task_06(*args, **kwargs):
+    """
+    SELECT gr.name as [group] , s.fullname as student, REVERSE(SUBSTR(REVERSE(s.fullname), 0, CHARINDEX(' ', REVERSE(s.fullname)))) AS last_name
+    FROM students s
+    LEFT JOIN groups gr ON s.group_id = gr.id 
+    WHERE group_id = 1
+    ORDER BY last_name
+    """
+    group_id = kwargs.get("group_id", 1)
+    query = (
+        session.query(
+            label("Group",Group.name),
+            func.CONCAT(Student.first_name, " ", Student.last_name).label("Student"),
+        )
+        .select_from(Student)
+        .join(Group)
+        .filter(Group.id == group_id)
+        .order_by(Student.last_name)
     )
     return get_query_dict(query)
 
