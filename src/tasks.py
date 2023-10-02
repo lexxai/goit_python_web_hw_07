@@ -5,11 +5,11 @@ from database.models import Student, Teacher, Group, Grade, Discipline
 
 
 def task_01():
-    print("TASK 01")
+    r = session.query()
 
 
 def task_02():
-    print("TASK 02")
+    r = session.query()
 
 
 def get_tasks(obj = None):
@@ -25,8 +25,16 @@ def get_tasks(obj = None):
 if __name__ == "__main__":
     # print(globals())
     # print(dir())
-    tasks = get_tasks(dir())
-    [task() for task in tasks]
+    # tasks = get_tasks(dir())
+    # [task() for task in tasks]
     # func = getattr(globals, tasks[0])
     # func = globals().get(tasks[0])
     # func()
+    for task in get_tasks():
+        print("-"*80)
+        print(task.__name__)
+        result = task()
+        print(f"result = {result}")
+        
+
+

@@ -15,4 +15,8 @@ if __name__ == "__main__":
     # create_data()
 
     # do tasks  
-    [task() for task in tasks.get_tasks()]
+    for task in tasks.get_tasks():
+        print("-"*80)
+        print(task.__name__)
+        result = task()
+        print(f"result = {result}")
