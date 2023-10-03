@@ -472,3 +472,115 @@ FROM grades
 [ 4] id: "4", grade: "60", date_of: "2023-11-27", student_id: "27", discipline_id: "2"
 [ 5] id: "5", grade: "68", date_of: "2023-11-27", student_id: "11", discipline_id: "2"
 ```
+
+
+### DOCKER COMPOSER
+```
+scripts>docker_run_docker-compose.cmd
+[+] Running 2/0
+ ✔ Container goit_python_web_hw_07-db-1    Created                                                                          0.0s 
+ ✔ Container goit_python_web_hw_07-code-1  Created                                                                          0.0s 
+Attaching to goit_python_web_hw_07-code-1
+goit_python_web_hw_07-code-1  | Sleep 1...
+goit_python_web_hw_07-code-1  | INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+goit_python_web_hw_07-code-1  | INFO  [alembic.runtime.migration] Will assume transactional DDL.
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_01
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:43,984 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:43,984 INFO sqlalchemy.engine.Engine [raw sql] {}
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:43,985 INFO sqlalchemy.engine.Engine select current_schema()
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:43,986 INFO sqlalchemy.engine.Engine [raw sql] {}
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:43,987 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:43,988 INFO sqlalchemy.engine.Engine [raw sql] {}
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:43,989 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,015 INFO sqlalchemy.engine.Engine SELECT concat(students.first_name, %(concat_1)s, students.last_name) AS "Student", ROUND(AVG(grades.grade), %(ROUND_1)s) AS "Average grade"
+goit_python_web_hw_07-code-1  | FROM grades JOIN students ON students.id = grades.student_id GROUP BY students.id ORDER BY "Average grade" DESC
+goit_python_web_hw_07-code-1  |  LIMIT %(param_1)s
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,016 INFO sqlalchemy.engine.Engine [generated in 0.00028s] {'concat_1': ' ', 'ROUND_1': 2, 'param_1': 5}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_02
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,022 INFO sqlalchemy.engine.Engine SELECT disciplines.name AS "Discipline", concat(students.first_name, %(concat_1)s, students.last_name) AS "Student", ROUND(AVG(grades.grade), %(ROUND_1)s) AS "Average grade"
+goit_python_web_hw_07-code-1  | FROM grades JOIN students ON students.id = grades.student_id JOIN disciplines ON disciplines.id = grades.discipline_id
+goit_python_web_hw_07-code-1  | WHERE disciplines.id = %(id_1)s GROUP BY students.id, disciplines.name ORDER BY "Average grade" DESC
+goit_python_web_hw_07-code-1  |  LIMIT %(param_1)s
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,023 INFO sqlalchemy.engine.Engine [generated in 0.00024s] {'concat_1': ' ', 'ROUND_1': 2, 'id_1': 2, 'param_1': 1}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_03
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,032 INFO sqlalchemy.engine.Engine SELECT disciplines.name AS "Discipline", groups.name AS "Group", ROUND(AVG(grades.grade), %(ROUND_1)s) AS "Average grade"
+goit_python_web_hw_07-code-1  | FROM grades JOIN students ON students.id = grades.student_id JOIN disciplines ON disciplines.id = grades.discipline_id JOIN groups ON groups.id = students.group_id
+goit_python_web_hw_07-code-1  | WHERE disciplines.id = %(id_1)s GROUP BY students.id, disciplines.name, groups.name ORDER BY "Average grade" DESC
+goit_python_web_hw_07-code-1  |  LIMIT %(param_1)s
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,032 INFO sqlalchemy.engine.Engine [generated in 0.00055s] {'ROUND_1': 2, 'id_1': 2, 'param_1': 1}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_04
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,038 INFO sqlalchemy.engine.Engine SELECT ROUND(AVG(grades.grade), %(ROUND_1)s) AS "Average grade"
+goit_python_web_hw_07-code-1  | FROM grades ORDER BY "Average grade" DESC
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,038 INFO sqlalchemy.engine.Engine [generated in 0.00039s] {'ROUND_1': 2}     
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   
+goit_python_web_hw_07-code-1  | [ 1] Average grade: "None"
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_05
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,055 INFO sqlalchemy.engine.Engine SELECT disciplines.name AS "Discipline", concat(teachers.first_name, %(concat_1)s, teachers.last_name) AS "Teacher"
+goit_python_web_hw_07-code-1  | FROM disciplines JOIN teachers ON teachers.id = disciplines.teacher_id
+goit_python_web_hw_07-code-1  | WHERE teachers.id = %(id_1)s ORDER BY disciplines.name
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,056 INFO sqlalchemy.engine.Engine [generated in 0.00071s] {'concat_1': ' ', 'id_1': 10}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_06
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,060 INFO sqlalchemy.engine.Engine SELECT groups.name AS "Group", concat(students.first_name, %(concat_1)s, students.last_name) AS "Student"
+goit_python_web_hw_07-code-1  | FROM students JOIN groups ON groups.id = students.group_id
+goit_python_web_hw_07-code-1  | WHERE groups.id = %(id_1)s ORDER BY students.last_name
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,060 INFO sqlalchemy.engine.Engine [generated in 0.00031s] {'concat_1': ' ', 'id_1': 1}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_07
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,071 INFO sqlalchemy.engine.Engine SELECT concat(students.first_name, %(concat_1)s, students.last_name) AS "Student", groups.name AS "Group", disciplines.name AS "Discipline", grades.grade AS "Grade"        
+goit_python_web_hw_07-code-1  | FROM grades JOIN students ON students.id = grades.student_id JOIN disciplines ON disciplines.id = grades.discipline_id, groups
+goit_python_web_hw_07-code-1  | WHERE groups.id = %(id_1)s AND disciplines.id = %(id_2)s ORDER BY grades.grade DESC
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,072 INFO sqlalchemy.engine.Engine [generated in 0.00035s] {'concat_1': ' ', 'id_1': 1, 'id_2': 1}
+goit_python_web_hw_07-code-1  | /app/src/tasks.py:23: SAWarning: SELECT statement has a cartesian product between FROM element(s) "groups" and FROM element "disciplines".  Apply join condition(s) between each element to resolve.
+goit_python_web_hw_07-code-1  |   return {"column_names": query.statement.columns.keys(), "result": query.all()}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_08
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,080 INFO sqlalchemy.engine.Engine SELECT concat(teachers.first_name, %(concat_1)s, teachers.last_name) AS "Teacher", disciplines.name AS "Discipline", ROUND(AVG(grades.grade), %(ROUND_1)s) AS "Average grade"
+goit_python_web_hw_07-code-1  | FROM grades JOIN disciplines ON disciplines.id = grades.discipline_id JOIN teachers ON teachers.id = disciplines.teacher_id
+goit_python_web_hw_07-code-1  | WHERE teachers.id = %(id_1)s GROUP BY disciplines.id, teachers.first_name, teachers.last_name ORDER BY "Average grade" DESC
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,080 INFO sqlalchemy.engine.Engine [generated in 0.00042s] {'concat_1': ' ', 'ROUND_1': 2, 'id_1': 8}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_09
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,092 INFO sqlalchemy.engine.Engine SELECT concat(students.first_name, %(concat_1)s, students.last_name) AS "Student", disciplines.name AS "Discipline"
+goit_python_web_hw_07-code-1  | FROM grades JOIN disciplines ON disciplines.id = grades.discipline_id JOIN students ON students.id = grades.student_id
+goit_python_web_hw_07-code-1  | WHERE students.id = %(id_1)s GROUP BY disciplines.id, students.first_name, students.last_name ORDER BY disciplines.name
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,092 INFO sqlalchemy.engine.Engine [generated in 0.00031s] {'concat_1': ' ', 'id_1': 1}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_10
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,098 INFO sqlalchemy.engine.Engine SELECT disciplines.name AS "Discipline", concat(students.first_name, %(concat_1)s, students.last_name) AS "Student", concat(teachers.first_name, %(concat_2)s, teachers.last_name) AS "Teacher"
+goit_python_web_hw_07-code-1  | FROM grades JOIN disciplines ON disciplines.id = grades.discipline_id JOIN students ON students.id = grades.student_id JOIN teachers ON teachers.id = disciplines.teacher_id
+goit_python_web_hw_07-code-1  | WHERE students.id = %(id_1)s AND teachers.id = %(id_2)s GROUP BY disciplines.id, "Student", "Teacher" ORDER BY disciplines.name
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,098 INFO sqlalchemy.engine.Engine [generated in 0.00028s] {'concat_1': ' ', 'concat_2': ' ', 'id_1': 5, 'id_2': 8}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_11
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,112 INFO sqlalchemy.engine.Engine SELECT disciplines.name AS "Discipline", concat(students.first_name, %(concat_1)s, students.last_name) AS "Student", concat(teachers.first_name, %(concat_2)s, teachers.last_name) AS "Teacher", ROUND(AVG(grades.grade), %(ROUND_1)s) AS "Average grade"
+goit_python_web_hw_07-code-1  | FROM grades JOIN disciplines ON disciplines.id = grades.discipline_id JOIN students ON students.id = grades.student_id JOIN teachers ON teachers.id = disciplines.teacher_id
+goit_python_web_hw_07-code-1  | WHERE students.id = %(id_1)s AND teachers.id = %(id_2)s GROUP BY disciplines.id, "Student", "Teacher" ORDER BY "Average grade" DESC
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,112 INFO sqlalchemy.engine.Engine [generated in 0.00028s] {'concat_1': ' ', 'concat_2': ' ', 'ROUND_1': 2, 'id_1': 5, 'id_2': 8}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1  | --------------------------------------------------------------------------------
+goit_python_web_hw_07-code-1  | task_12
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,123 INFO sqlalchemy.engine.Engine SELECT groups.name AS "Group", disciplines.name AS "Discipline", concat(students.first_name, %(concat_1)s, students.last_name) AS "Student", concat(teachers.first_name, %(concat_2)s, teachers.last_name) AS "Teacher", grades.date_of AS "DATE OF", grades.grade AS "Grade"
+goit_python_web_hw_07-code-1  | FROM grades JOIN disciplines ON disciplines.id = grades.discipline_id JOIN students ON students.id = grades.student_id JOIN teachers ON teachers.id = disciplines.teacher_id, groups
+goit_python_web_hw_07-code-1  | WHERE groups.id = %(id_1)s AND grades.discipline_id = %(discipline_id_1)s AND grades.date_of = (SELECT max(grades.date_of) AS max_1
+goit_python_web_hw_07-code-1  | FROM grades JOIN students ON students.id = grades.student_id
+goit_python_web_hw_07-code-1  | WHERE students.group_id = %(group_id_1)s AND grades.discipline_id = %(discipline_id_2)s) ORDER BY "Grade" DESC
+goit_python_web_hw_07-code-1  | 2023-10-03 03:36:44,123 INFO sqlalchemy.engine.Engine [generated in 0.00061s] {'concat_1': ' ', 'concat_2': ' ', 'id_1': 1, 'discipline_id_1': 1, 'group_id_1': 1, 'discipline_id_2': 1}
+goit_python_web_hw_07-code-1  | .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+goit_python_web_hw_07-code-1 exited with code 0
+
+```

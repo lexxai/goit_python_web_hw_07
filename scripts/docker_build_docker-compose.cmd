@@ -1,6 +1,6 @@
 @echo off
 PUSHD ..
 
-docker-compose up --build
+docker-compose up code --build
 
 POPD
