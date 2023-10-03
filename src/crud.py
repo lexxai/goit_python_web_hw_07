@@ -188,10 +188,11 @@ def action_list(kwargs):
 
 
 def action_update():
-    ...
+    return "not implemented"
+
 
 def action_remove():
-    ...
+    return "not implemented"
 
 
 ACTIONS_LIST = {

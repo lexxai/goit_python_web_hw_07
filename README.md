@@ -421,13 +421,6 @@ options:
 ### create
 --action create -m Teacher --name "Jon Valis" --email dsds@wwe.com --address "addres one"
 ```
-2023-10-03 03:55:56,575 INFO sqlalchemy.engine.Engine select pg_catalog.version()
-2023-10-03 03:55:56,576 INFO sqlalchemy.engine.Engine [raw sql] {}
-2023-10-03 03:55:56,580 INFO sqlalchemy.engine.Engine select current_schema()
-2023-10-03 03:55:56,580 INFO sqlalchemy.engine.Engine [raw sql] {}
-2023-10-03 03:55:56,583 INFO sqlalchemy.engine.Engine show standard_conforming_strings
-2023-10-03 03:55:56,584 INFO sqlalchemy.engine.Engine [raw sql] {}
-2023-10-03 03:55:56,589 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 2023-10-03 03:55:56,592 INFO sqlalchemy.engine.Engine INSERT INTO teachers (first_name, last_name, email, phone, address) VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone)s, %(address)s) RETURNING teachers.id
 2023-10-03 03:55:56,592 INFO sqlalchemy.engine.Engine [generated in 0.00075s] {'first_name': 'Jon', 'last_name': 'Valis', 'email': 'dsds@wwe.com', 'phone': None, 'address': 'addres one'}
 2023-10-03 03:55:56,592 INFO sqlalchemy.engine.Engine COMMIT
@@ -442,17 +435,40 @@ Done. Created record with ID: 24
 
 ### list
 ```
--a list -m Discipline --limit 5    
-2023-10-03 03:53:18,733 INFO sqlalchemy.engine.Engine select pg_catalog.version()
-2023-10-03 03:53:18,733 INFO sqlalchemy.engine.Engine [raw sql] {}
-2023-10-03 03:53:18,737 INFO sqlalchemy.engine.Engine select current_schema()
-2023-10-03 03:53:18,738 INFO sqlalchemy.engine.Engine [raw sql] {}
-2023-10-03 03:53:18,741 INFO sqlalchemy.engine.Engine show standard_conforming_strings
-2023-10-03 03:53:18,741 INFO sqlalchemy.engine.Engine [raw sql] {}
-2023-10-03 03:53:18,741 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-2023-10-03 03:53:18,752 INFO sqlalchemy.engine.Engine SELECT disciplines.id AS disciplines_id, disciplines.name AS disciplines_name, disciplines.teacher_id AS disciplines_teacher_id
+ -a list -m Discipline --limit 5
+2023-10-03 04:11:14,179 INFO sqlalchemy.engine.Engine SELECT disciplines.id AS disciplines_id, disciplines.name AS disciplines_name, disciplines.teacher_id AS disciplines_teacher_id
 FROM disciplines
  LIMIT %(param_1)s
-2023-10-03 03:53:18,752 INFO sqlalchemy.engine.Engine [generated in 0.00114s] {'param_1': 5}
-{'column_names': ['id', 'name', 'teacher_id'], 'result': [{'id': 1, 'name': 'Python Core', 'teacher_id': 10}, {'id': 2, 'name': 'Python Web', 'teacher_id': 9}, {'id': 3, 'name': 'Python Data Science', 'teacher_id': 1}, {'id': 4, 'name': 'Вища математика', 'teacher_id': 10}, {'id': 5, 'name': 'HTML CSS', 'teacher_id': 10}]}
+2023-10-03 04:11:14,179 INFO sqlalchemy.engine.Engine [generated in 0.00085s] {'param_1': 5}
+[ 1] id: "1", name: "Python Core", teacher_id: "10"
+[ 2] id: "2", name: "Python Web", teacher_id: "9"
+[ 3] id: "3", name: "Python Data Science", teacher_id: "1"
+[ 4] id: "4", name: "Вища математика", teacher_id: "10"
+[ 5] id: "5", name: "HTML CSS", teacher_id: "10"
+```
+
+-a list -m Teacher --limit 5  
+```
+2023-10-03 04:10:25,040 INFO sqlalchemy.engine.Engine SELECT teachers.id AS teachers_id, teachers.first_name AS teachers_first_name, teachers.last_name AS teachers_last_name, teachers.email AS teachers_email, teachers.phone AS teachers_phone, teachers.address AS teachers_address
+FROM teachers
+ LIMIT %(param_1)s
+2023-10-03 04:10:25,040 INFO sqlalchemy.engine.Engine [generated in 0.00089s] {'param_1': 5}
+[ 1] id: "1", first_name: "Орест", last_name: "Товстуха", email: "myron44@email.ua", phone: "+380 69 737-27-27", address: "вулиця Докова, буд. 942 кв. 97, Нововолинськ, 53126"
+[ 2] id: "2", first_name: "Максим", last_name: "Яценюк", email: "nestorbandurka@meta.ua", phone: "093 447 68 62", address: "провулок Лиманчик 2-й Лінія 4-та, буд. 52, Тернопіль, 52059"
+[ 3] id: "3", first_name: "Болеслав", last_name: "Лаба", email: "mykolaiatroshchenko@gov.ua", phone: "517 47 83", address: "сквер 8-ма Лінія Дачі Ковалевського, буд. 526, Миргород, 74434"
+[ 4] id: "4", first_name: "Франц", last_name: "Доценко", email: "abramenkoirena@i.ua", phone: "+380 23 281 41 71", address: "шосе Виноградна, буд. 2 кв. 465, Брянка, 64891"
+[ 5] id: "5", first_name: "Едита", last_name: "Артимович", email: "aleksandrenkoviacheslav@gov.ua", phone: "+380 24 229-50-50", address: "шосе Естонський, буд. 6, Вільногірськ, 48925"
+```
+
+-a list -m Grade --limit 5      
+```
+2023-10-03 04:12:26,963 INFO sqlalchemy.engine.Engine SELECT grades.id AS grades_id, grades.grade AS grades_grade, grades.date_of AS grades_date_of, grades.student_id AS grades_student_id, grades.discipline_id AS grades_discipline_id
+FROM grades
+ LIMIT %(param_1)s
+2023-10-03 04:12:26,963 INFO sqlalchemy.engine.Engine [generated in 0.00081s] {'param_1': 5}
+[ 1] id: "1", grade: "88", date_of: "2023-11-27", student_id: "27", discipline_id: "2"
+[ 2] id: "2", grade: "76", date_of: "2023-11-27", student_id: "11", discipline_id: "2"
+[ 3] id: "3", grade: "93", date_of: "2023-11-27", student_id: "98", discipline_id: "2"
+[ 4] id: "4", grade: "60", date_of: "2023-11-27", student_id: "27", discipline_id: "2"
+[ 5] id: "5", grade: "68", date_of: "2023-11-27", student_id: "11", discipline_id: "2"
 ```
