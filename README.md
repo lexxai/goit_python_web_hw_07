@@ -387,3 +387,72 @@ WHERE students.group_id = %(group_id_1)s AND grades.discipline_id = %(discipline
 [ 4] Group: "M88-1/8", Discipline: "Python Core", Student: "Панас Овсієнко", Teacher: "Давид Цимбалюк", DATE OF: "2024-01-02", Grade: "41"
 
 ```
+
+
+### CONSOLE CLI
+
+```
+usage: main.py [-h] [-a ACTION] [-m {Teacher,Student,Discipline,Grade}] [-n,  NAME] [-e EMAIL] [-p PHONE] [-addr ADDRESS]
+               [--id ID] [--sid SID] [--tid TID] [--did DID] [--grade GRADE] [--date DATE] [--limit LIMIT]
+
+options:
+  -h, --help            show this help message and exit
+  -a ACTION, --action ACTION
+                        Action
+  -m {Teacher,Student,Discipline,Grade}, --model {Teacher,Student,Discipline,Grade}
+                        What model modify
+  -n,  NAME, --name NAME
+                        Name or Full name
+  -e EMAIL, --email EMAIL
+                        Email
+  -p PHONE, --phone PHONE
+                        Phone
+  -addr ADDRESS, --address ADDRESS
+                        Address
+  --id ID               ID of record
+  --sid SID             Student ID record
+  --tid TID             Teacher ID record
+  --did DID             Discipline ID record
+  --grade GRADE         grade
+  --date DATE           date of grade
+  --limit LIMIT         limit of results
+```
+
+### create
+--action create -m Teacher --name "Jon Valis" --email dsds@wwe.com --address "addres one"
+```
+2023-10-03 03:55:56,575 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2023-10-03 03:55:56,576 INFO sqlalchemy.engine.Engine [raw sql] {}
+2023-10-03 03:55:56,580 INFO sqlalchemy.engine.Engine select current_schema()
+2023-10-03 03:55:56,580 INFO sqlalchemy.engine.Engine [raw sql] {}
+2023-10-03 03:55:56,583 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2023-10-03 03:55:56,584 INFO sqlalchemy.engine.Engine [raw sql] {}
+2023-10-03 03:55:56,589 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2023-10-03 03:55:56,592 INFO sqlalchemy.engine.Engine INSERT INTO teachers (first_name, last_name, email, phone, address) VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone)s, %(address)s) RETURNING teachers.id
+2023-10-03 03:55:56,592 INFO sqlalchemy.engine.Engine [generated in 0.00075s] {'first_name': 'Jon', 'last_name': 'Valis', 'email': 'dsds@wwe.com', 'phone': None, 'address': 'addres one'}
+2023-10-03 03:55:56,592 INFO sqlalchemy.engine.Engine COMMIT
+2023-10-03 03:55:56,607 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2023-10-03 03:55:56,607 INFO sqlalchemy.engine.Engine SELECT teachers.id AS teachers_id, teachers.first_name AS teachers_first_name, teachers.last_name AS teachers_last_name, teachers.email AS teachers_email, teachers.phone AS teachers_phone, teachers.address AS teachers_address
+FROM teachers
+WHERE teachers.id = %(pk_1)s
+2023-10-03 03:55:56,607 INFO sqlalchemy.engine.Engine [generated in 0.00112s] {'pk_1': 24}
+Done. Created record with ID: 24
+```
+
+
+### list
+```
+-a list -m Discipline --limit 5    
+2023-10-03 03:53:18,733 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2023-10-03 03:53:18,733 INFO sqlalchemy.engine.Engine [raw sql] {}
+2023-10-03 03:53:18,737 INFO sqlalchemy.engine.Engine select current_schema()
+2023-10-03 03:53:18,738 INFO sqlalchemy.engine.Engine [raw sql] {}
+2023-10-03 03:53:18,741 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2023-10-03 03:53:18,741 INFO sqlalchemy.engine.Engine [raw sql] {}
+2023-10-03 03:53:18,741 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2023-10-03 03:53:18,752 INFO sqlalchemy.engine.Engine SELECT disciplines.id AS disciplines_id, disciplines.name AS disciplines_name, disciplines.teacher_id AS disciplines_teacher_id
+FROM disciplines
+ LIMIT %(param_1)s
+2023-10-03 03:53:18,752 INFO sqlalchemy.engine.Engine [generated in 0.00114s] {'param_1': 5}
+{'column_names': ['id', 'name', 'teacher_id'], 'result': [{'id': 1, 'name': 'Python Core', 'teacher_id': 10}, {'id': 2, 'name': 'Python Web', 'teacher_id': 9}, {'id': 3, 'name': 'Python Data Science', 'teacher_id': 1}, {'id': 4, 'name': 'Вища математика', 'teacher_id': 10}, {'id': 5, 'name': 'HTML CSS', 'teacher_id': 10}]}
+```

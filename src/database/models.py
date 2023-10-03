@@ -95,8 +95,10 @@ class Teacher(Base):
     @hybrid_property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
-
-
+    
+    def __repr__(self):
+        return f"id={self.id}, fullname={self.full_name}, email={self.email}"
+    
 class Discipline(Base):
     __tablename__ = "disciplines"
     id = Column(Integer, primary_key=True)
