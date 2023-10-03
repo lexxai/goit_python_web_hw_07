@@ -9,3 +9,5 @@ doc/
 scripts/
 *.zip
 logs/
+!.config/
+database/
